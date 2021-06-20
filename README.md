@@ -36,9 +36,9 @@
 
 `vector< contentRS > RS(5)` Reservation Station  
 
-`ALU bufferADD` 在加減法器裡的ALU  
+`ALU bufferADD` 在加減法器ALU裡的BUFFER  
 
-`ALU bufferMUL` 在乘除法器裡的ALU  
+`ALU bufferMUL` 在乘除法器ALU裡的BUFFER  
 
 `int currentCycle = 1` 目前在第幾個 cycle  
 
