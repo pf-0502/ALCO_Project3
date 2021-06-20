@@ -27,7 +27,7 @@ struct contentRS {
 struct ALU {
 	int cycle;
 	int RS;
-	bool empty; // 0 ¥NªíªÅªº¡A1 ¥Nªí¦³ªF¦è
+	bool empty; // 0 ä»£è¡¨ç©ºçš„ï¼Œ1 ä»£è¡¨æœ‰æ±è¥¿
 };
 
 bool RSempty[5] = {};
@@ -40,9 +40,9 @@ vector< contentRS > RS(5);
 ALU bufferADD;
 ALU bufferMUL;
 
-int currentCycle = 1; // ¥Ø«e¦b²Ä´X­Ó cycle
-int ADDSUB, MUL, DIV; // ¤À§O¦b ALU °õ¦æªº cycle time
-bool changedCycle; // ¬O§_¬°¦³ÅÜ¤Æªºcycle
+int currentCycle = 1; // ç›®å‰åœ¨ç¬¬å¹¾å€‹ cycle
+int ADDSUB, MUL, DIV; // åˆ†åˆ¥åœ¨ ALU åŸ·è¡Œçš„ cycle time
+bool changedCycle; // æ˜¯å¦ç‚ºæœ‰è®ŠåŒ–çš„cycle
 
 void loadTest()
 {
@@ -51,7 +51,7 @@ void loadTest()
 	{
 		string input, operation;
 		stringstream ss;
-		string temp1, temp2, temp3; // ¥Î¨Ó¼È¦s rd, rs1, rs2
+		string temp1, temp2, temp3; // ç”¨ä¾†æš«å­˜ rd, rs1, rs2
 		instruction init;
 		getline(test, input);
 		ISA.push_back(init);
@@ -141,30 +141,30 @@ void Issue()
 		{
 			for (int i = 0; i < 3; i++) // ADD's ALU
 			{
-				if (!RSempty[i]) // RS[0] ~ RS[2] ¦³ªÅ¶¡
+				if (!RSempty[i]) // RS[0] ~ RS[2] æœ‰ç©ºé–“
 				{
-					if (ISA[0].opcode == "ADD" || ISA[0].opcode == "ADDI") // operand ¬° +
+					if (ISA[0].opcode == "ADD" || ISA[0].opcode == "ADDI") // operand ç‚º +
 						RS[i].operand = "+";
-					else                                                   // operand ¬° -
+					else                                                   // operand ç‚º -
 						RS[i].operand = "-";
 
-					if (RAT[ISA[0].rs1] == "")                             // RAT¸Ì¨SªF¦è
+					if (RAT[ISA[0].rs1] == "")                             // RATè£¡æ²’æ±è¥¿
 						RS[i].rs1 = to_string(RF[ISA[0].rs1]);
-					else                                                   // RAT¦³ªF¦è
+					else                                                   // RATæœ‰æ±è¥¿
 						RS[i].rs1 = RAT[ISA[0].rs1];
 
-					if (ISA[0].opcode == "ADDI")                           // I-type imm ªº­Èª½±µ©ñ¨ì rs2 ¸Ì
+					if (ISA[0].opcode == "ADDI")                           // I-type imm çš„å€¼ç›´æ¥æ”¾åˆ° rs2 è£¡
 						RS[i].rs2 = to_string(ISA[0].imm12);
-					else if (RAT[ISA[0].rs2] == "")                        // RAT¸Ì¨SªF¦è
+					else if (RAT[ISA[0].rs2] == "")                        // RATè£¡æ²’æ±è¥¿
 						RS[i].rs2 = to_string(RF[ISA[0].rs2]);
-					else                                                   // RAT¦³ªF¦è
+					else                                                   // RATæœ‰æ±è¥¿
 						RS[i].rs2 = RAT[ISA[0].rs2];
 
-					RAT[ISA[0].rd] = "RS" + to_string(i + 1);              // §ó·s RAT ªº­È
+					RAT[ISA[0].rd] = "RS" + to_string(i + 1);              // æ›´æ–° RAT çš„å€¼
 
 					RSempty[i] = 1;
 					changedCycle = 1;
-					ISA.erase(ISA.begin()); // §â Issue ¶i¨Óªº instruction §R°£
+					ISA.erase(ISA.begin()); // æŠŠ Issue é€²ä¾†çš„ instruction åˆªé™¤
 					break;
 				}
 			}
@@ -173,28 +173,28 @@ void Issue()
 		{
 			for (int i = 3; i < 5; i++) // MUL's ALU
 			{
-				if (!RSempty[i]) // RS[3] ~ RS[4] ¦³ªÅ¶¡
+				if (!RSempty[i]) // RS[3] ~ RS[4] æœ‰ç©ºé–“
 				{
-					if (ISA[0].opcode == "MUL")                            // operand ¬° *
+					if (ISA[0].opcode == "MUL")                            // operand ç‚º *
 						RS[i].operand = "*";
-					else                                                   // operand ¬° /
+					else                                                   // operand ç‚º /
 						RS[i].operand = "/";
 
-					if (RAT[ISA[0].rs1] == "")                             // RAT¸Ì¨SªF¦è
+					if (RAT[ISA[0].rs1] == "")                             // RATè£¡æ²’æ±è¥¿
 						RS[i].rs1 = to_string(RF[ISA[0].rs1]);
-					else                                                   // RAT¦³ªF¦è
+					else                                                   // RATæœ‰æ±è¥¿
 						RS[i].rs1 = RAT[ISA[0].rs1];
 
-					if (RAT[ISA[0].rs2] == "")                             // RAT¸Ì¨SªF¦è
+					if (RAT[ISA[0].rs2] == "")                             // RATè£¡æ²’æ±è¥¿
 						RS[i].rs2 = to_string(RF[ISA[0].rs2]);
-					else                                                   // RAT¦³ªF¦è
+					else                                                   // RATæœ‰æ±è¥¿
 						RS[i].rs2 = RAT[ISA[0].rs2];
 
-					RAT[ISA[0].rd] = "RS" + to_string(i + 1);              // §ó·s RAT ªº­È
+					RAT[ISA[0].rd] = "RS" + to_string(i + 1);              // æ›´æ–° RAT çš„å€¼
 
 					RSempty[i] = 1;
 					changedCycle = 1;
-					ISA.erase(ISA.begin()); // §â Issue ¶i¨Óªº instruction §R°£
+					ISA.erase(ISA.begin()); // æŠŠ Issue é€²ä¾†çš„ instruction åˆªé™¤
 					break;
 				}
 			}
@@ -254,7 +254,7 @@ void WriteResult(ALU& buffer)
 	int result;
 	if (currentCycle == buffer.cycle)
 	{
-		// ¥ı­pºâ buffer ¸Ìªº­È
+		// å…ˆè¨ˆç®— buffer è£¡çš„å€¼
 		if (RS[buffer.RS - 1].operand == "+")
 			result = stoi(RS[buffer.RS - 1].rs1) + stoi(RS[buffer.RS - 1].rs2);
 		else if (RS[buffer.RS - 1].operand == "-")
@@ -265,7 +265,7 @@ void WriteResult(ALU& buffer)
 			result = stoi(RS[buffer.RS - 1].rs1) / stoi(RS[buffer.RS - 1].rs2);
 		buffer.empty = 0;
 
-		// §ó·s RAT ©M RF ªº­È
+		// æ›´æ–° RAT å’Œ RF çš„å€¼
 		for (int i = 1; i <= 5; i++)
 			if (RAT[i] == "RS" + to_string(buffer.RS))
 			{
@@ -294,13 +294,15 @@ void WriteResult(ALU& buffer)
 
 int main() {
 	loadTest();
+	cout << "Please input cycle time of ADD/SUB, MUL, DIV respectivity." << endl;
 	cin >> ADDSUB >> MUL >> DIV;
-	for (int i = 1; i <= 5; i++) // ³]©w RF ¸Ìªº­È
+	
+	for (int i = 1; i <= 5; i++) // è¨­å®š RF è£¡çš„å€¼
 		RF[i] = (i - 1) * 2;
 
 	while (true)
 	{
-		if (ISA.empty()) //§PÂ_ ISA ¤Î RS ¬O§_¬Ò¬°ªÅ
+		if (ISA.empty()) //åˆ¤æ–· ISA åŠ RS æ˜¯å¦çš†ç‚ºç©º
 		{
 			int i;
 			for (i = 0; i < 5; i++)
